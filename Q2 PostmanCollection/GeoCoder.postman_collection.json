@@ -1,0 +1,879 @@
+{
+	"info": {
+		"_postman_id": "e9c7e2eb-9631-4c81-b7b2-aed28e051608",
+		"name": "GeoCoder",
+		"description": "Collection for batch geocoder api.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetJobStatus",
+			"item": [
+				{
+					"name": "CreateJobAndGetRequestID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"postman.setEnvironmentVariable(\"requestid\",jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"MetaInfo\"][\"RequestId\"])\r",
+									"pm.test(\"Status code is not 404\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.equal(404);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"Check response contains accepted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.equal(\"accepted\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "recId|prox\r\n0001|52.505308,13.327739,250\r\n0002|49.917257,8.486488,250\r\n0003|51.119593,7.399356,250\r\n0004|49.20012,8.12326,250\r\n0005|51.116845,7.397318,250\r\n0006|52.265938,7.976922,250\r\n0007|48.143131,10.829233,250\r\n0008|51.770237,7.442682,250\r\n0009|51.511877,7.461382,250\r\n0010|93.53,13.391389,250\r\n0011|53.505308,13.327739,250\r\n0012|44.917257,8.486488,250\r\n0013|55.119593,7.399356,250\r\n0014|41.20012,8.12326,250\r\n0015|52.116845,7.397318,250\r\n0016|54.265938,7.976922,250\r\n0017|45.143131,10.829233,250\r\n0018|56.770237,7.442682,250\r\n0019|52.511877,7.461382,250\r\n0020|34.53,13.391389,250\r\n0021|67.505308,13.327739,250\r\n0022|66.917257,8.486488,250\r\n0023|98.119593,7.399356,250\r\n0024|12.20012,8.12326,250\r\n0025|34.116845,7.397318,250\r\n0026|56.265938,7.976922,250\r\n0027|67.143131,10.829233,250\r\n0028|54.770237,7.442682,250\r\n0029|12.511877,7.461382,250\r\n0030|31.53,13.391389,250",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs?apiKey=BzK6LuoI9XslyyiZx047xECyEkKx0pyRb8mC-gQ1xAQ&indelim=%7C&outdelim=%7C&action=run&outcols=displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country&outputcombined=false",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "apiKey",
+									"value": "BzK6LuoI9XslyyiZx047xECyEkKx0pyRb8mC-gQ1xAQ"
+								},
+								{
+									"key": "indelim",
+									"value": "%7C"
+								},
+								{
+									"key": "outdelim",
+									"value": "%7C"
+								},
+								{
+									"key": "action",
+									"value": "run"
+								},
+								{
+									"key": "outcols",
+									"value": "displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country"
+								},
+								{
+									"key": "outputcombined",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJobStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Check the job is accepted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.equal(\"accepted\");\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs/{{requestid}}?action=status&apiKey={{myapikey}}",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs",
+								"{{requestid}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "status"
+								},
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This set of requests, creates a valid job and ensures the job is succesfully created."
+		},
+		{
+			"name": "CancelJobs",
+			"item": [
+				{
+					"name": "CreateJobAndGetRequestID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"postman.setEnvironmentVariable(\"requestid\",jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"MetaInfo\"][\"RequestId\"])\r",
+									"pm.test(\"Status code is not 302\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.equal(302);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"Check response contains accepted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.equal(\"accepted\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "recId|prox\r\n0001|52.505308,13.327739,250\r\n0002|49.917257,8.486488,250\r\n0003|51.119593,7.399356,250\r\n0004|49.20012,8.12326,250\r\n0005|51.116845,7.397318,250",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs?apiKey=BzK6LuoI9XslyyiZx047xECyEkKx0pyRb8mC-gQ1xAQ&indelim=%7C&outdelim=%7C&action=run&outcols=displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country&outputcombined=false",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "apiKey",
+									"value": "BzK6LuoI9XslyyiZx047xECyEkKx0pyRb8mC-gQ1xAQ"
+								},
+								{
+									"key": "indelim",
+									"value": "%7C"
+								},
+								{
+									"key": "outdelim",
+									"value": "%7C"
+								},
+								{
+									"key": "action",
+									"value": "run"
+								},
+								{
+									"key": "outcols",
+									"value": "displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country"
+								},
+								{
+									"key": "outputcombined",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CancelJob",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Status code are not 3xx or 4xx\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.oneOf([300,302,307,400,404,503,500]);\r",
+									"});\r",
+									"setTimeout(function(){}, 4000);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs/{{requestid}}?action=cancel&apiKey={{myapikey}}",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs",
+								"{{requestid}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "cancel"
+								},
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCancellationStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"setTimeout(function(){}, 4000);\r",
+									"pm.test(\"Status code are not 3xx or 4xx\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.oneOf([300,302,307,400,404,503,500]);\r",
+									"});\r",
+									"pm.test(\"Check response contains cancelled\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.equal(\"cancelled\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs/{{requestid}}?action=cancel&apiKey={{myapikey}}",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs",
+								"{{requestid}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "cancel"
+								},
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJobStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Check the job is submitted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.be.oneOf([\"submitted\",\"running\",\"completed\"]);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs/{{requestid}}?action=status&apiKey={{myapikey}}",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs",
+								"{{requestid}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "status"
+								},
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Checking cancelling job works as expected. After job is created a delay is placed so that the job can be cancelled after some time."
+		},
+		{
+			"name": "RemoveJobs",
+			"item": [
+				{
+					"name": "CreateJobAndGetRequestID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"postman.setEnvironmentVariable(\"requestid\",jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"MetaInfo\"][\"RequestId\"])\r",
+									"pm.test(\"Status code is not 302\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.equal(302);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"Check response contains accepted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.equal(\"accepted\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "recId|prox\r\n0001|34.505308,13.327739,250\r\n0002|12.917257,8.486488,250\r\n0003|56.119593,7.399356,250\r\n0004|44.20012,8.12326,250\r\n0005|67.116845,7.397318,250\r\n0006|57.265938,7.976922,250\r\n0007|44.143131,10.829233,250\r\n0008|12.770237,7.442682,250\r\n0009|23.511877,7.461382,250\r\n0010|34.53,13.391389,250",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs?apiKey=BzK6LuoI9XslyyiZx047xECyEkKx0pyRb8mC-gQ1xAQ&indelim=%7C&outdelim=%7C&action=run&outcols=displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country&outputcombined=false",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "apiKey",
+									"value": "BzK6LuoI9XslyyiZx047xECyEkKx0pyRb8mC-gQ1xAQ"
+								},
+								{
+									"key": "indelim",
+									"value": "%7C"
+								},
+								{
+									"key": "outdelim",
+									"value": "%7C"
+								},
+								{
+									"key": "action",
+									"value": "run"
+								},
+								{
+									"key": "outcols",
+									"value": "displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country"
+								},
+								{
+									"key": "outputcombined",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemovingJob",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Ensure removing is not authorised\", () => {\r",
+									"  pm.expect(pm.response.code).to.equal(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs/{{requestid}}&apiKey={{myapikey}}",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs",
+								"{{requestid}}&apiKey={{myapikey}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This requests focuses on removing the job and ensures the response contains certain parameters."
+		},
+		{
+			"name": "GeoCodeForMultipleAddresses",
+			"item": [
+				{
+					"name": "AddMultipleAddresses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"postman.setEnvironmentVariable(\"requestid\",jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"MetaInfo\"][\"RequestId\"])\r",
+									"pm.test(\"Status code is not 404\", () => {\r",
+									"  pm.expect(pm.response.code).to.not.equal(404);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"Check response contains accepted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.equal(\"accepted\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "recId|searchText|country\r\n0001|Invalidenstraße 116 10115 Berlin|DEU\r\n0002|Am Kronberger Hang 8 65824 Schwalbach|DEU\r\n0003|425 W Randolph St Chicago IL 60606|USA\r\n0004|One Main Street Cambridge MA 02142|USA\r\n0005|200 S Mathilda Ave Sunnyvale CA 94086|USA"
+						},
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs?apiKey={{myapikey}}&indelim=%7C&outdelim=%7C&action=run&outcols=displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country&outputcombined=false",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								},
+								{
+									"key": "indelim",
+									"value": "%7C"
+								},
+								{
+									"key": "outdelim",
+									"value": "%7C"
+								},
+								{
+									"key": "action",
+									"value": "run"
+								},
+								{
+									"key": "outcols",
+									"value": "displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country"
+								},
+								{
+									"key": "outputcombined",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJobStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Check the job is submitted\", () => {\r",
+									"  pm.expect(jsonObject[\"ns2:SearchBatch\"][\"Response\"][\"Status\"]).to.be.oneOf([\"accepted\",\"submitted\",\"running\",\"completed\"]);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs/{{requestid}}?action=status&apiKey={{myapikey}}",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs",
+								"{{requestid}}"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "status"
+								},
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "These requests deal with adding multiple addressed to the batch geocoder apis."
+		},
+		{
+			"name": "GecoderInvalidEntries",
+			"item": [
+				{
+					"name": "InvalidEntries",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Status code are 3xx or 4xx\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([300,302,307,400,404]);\r",
+									"});\r",
+									"tests[\"Check that response contains invalid error message\"] = responseBody.has(\"Invalid input header\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Invalid"
+						},
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs?apiKey={{myapikey}}&indelim=%7C&outdelim=%7C&action=run&outcols=displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country&outputcombined=false",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								},
+								{
+									"key": "indelim",
+									"value": "%7C"
+								},
+								{
+									"key": "outdelim",
+									"value": "%7C"
+								},
+								{
+									"key": "action",
+									"value": "run"
+								},
+								{
+									"key": "outcols",
+									"value": "displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country"
+								},
+								{
+									"key": "outputcombined",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InvalidHeaders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = xml2Json(responseBody);\r",
+									"pm.test(\"Status code are 3xx or 4xx\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([300,302,307,400,404]);\r",
+									"});\r",
+									"tests[\"Check that response contains invalid request message framing error message\"] = responseBody.has(\"invalid request message framing\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "invalid",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "recId|searchText|country\r\n0001|Invalidenstraße 116 10115 Berlin|DEU\r\n0002|Am Kronberger Hang 8 65824 Schwalbach|DEU\r\n0003|425 W Randolph St Chicago IL 60606|USA\r\n0004|One Main Street Cambridge MA 02142|USA\r\n0005|200 S Mathilda Ave Sunnyvale CA 94086|USA"
+						},
+						"url": {
+							"raw": "https://batch.geocoder.ls.hereapi.com/6.2/jobs?apiKey={{myapikey}}&indelim=%7C&outdelim=%7C&action=run&outcols=displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country&outputcombined=false",
+							"protocol": "https",
+							"host": [
+								"batch",
+								"geocoder",
+								"ls",
+								"hereapi",
+								"com"
+							],
+							"path": [
+								"6.2",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "apiKey",
+									"value": "{{myapikey}}"
+								},
+								{
+									"key": "indelim",
+									"value": "%7C"
+								},
+								{
+									"key": "outdelim",
+									"value": "%7C"
+								},
+								{
+									"key": "action",
+									"value": "run"
+								},
+								{
+									"key": "outcols",
+									"value": "displayLatitude,displayLongitude,locationLabel,houseNumber,street,district,city,postalCode,county,state,country"
+								},
+								{
+									"key": "outputcombined",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Ensure invalid header and body returns error in response."
+		}
+	]
+}

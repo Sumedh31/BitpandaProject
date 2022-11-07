@@ -1,0 +1,50 @@
+{
+  "Zalando Home Page" : {
+    "transaction" : "Zalando Home Page",
+    "sampleCount" : 188,
+    "errorCount" : 1,
+    "errorPct" : 0.5319149,
+    "meanResTime" : 1023.0691489361701,
+    "medianResTime" : 950.5,
+    "minResTime" : 618.0,
+    "maxResTime" : 2302.0,
+    "pct1ResTime" : 1435.7,
+    "pct2ResTime" : 1647.85,
+    "pct3ResTime" : 2123.9999999999973,
+    "throughput" : 1.976388465460509,
+    "receivedKBytesPerSec" : 1909.5081479209812,
+    "sentKBytesPerSec" : 0.23805526791627682
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 284,
+    "errorCount" : 1,
+    "errorPct" : 0.35211268,
+    "meanResTime" : 809.3767605633805,
+    "medianResTime" : 766.0,
+    "minResTime" : 247.0,
+    "maxResTime" : 2302.0,
+    "pct1ResTime" : 1379.0,
+    "pct2ResTime" : 1495.75,
+    "pct3ResTime" : 1920.0999999999951,
+    "throughput" : 2.9856081073977903,
+    "receivedKBytesPerSec" : 2324.3076357387276,
+    "sentKBytesPerSec" : 0.36322215710185757
+  },
+  "Search for jeans" : {
+    "transaction" : "Search for jeans",
+    "sampleCount" : 96,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 390.8958333333333,
+    "medianResTime" : 379.5,
+    "minResTime" : 247.0,
+    "maxResTime" : 706.0,
+    "pct1ResTime" : 520.3,
+    "pct2ResTime" : 563.8499999999995,
+    "pct3ResTime" : 706.0,
+    "throughput" : 1.252152136484583,
+    "receivedKBytesPerSec" : 514.6472019576289,
+    "sentKBytesPerSec" : 0.15529621223978712
+  }
+}
